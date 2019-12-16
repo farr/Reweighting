@@ -1,0 +1,15 @@
+name: reweighting
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - scipy
+  - ipywidgets
+  - nodejs
+  - pystan
+  - numpy
+  - seaborn
+  - jupyterlab
+  - python=3.7
+  - arviz
+  - tqdm
