@@ -1,0 +1,191 @@
+\documentclass[modern]{aastex63}
+
+\usepackage{amsmath}
+
+\newcommand{\dd}{\ensuremath{\mathrm{d}}}
+\newcommand{\diff}[2]{\frac{\dd #1}{\dd #2}}
+
+\begin{document}
+
+\title{Re-Weighting Existing Samples to a Population Analysis}
+\author{Will M. Farr}
+\email{will.farr@stonybrook.edu}
+\email{wfarr@flatironinstitute.org}
+\affiliation{Department of Physics and Astronomy, Stony Brook University, Stony Brook NY 11794, United States}
+\affiliation{Center for Computational Astrophysics, Flatiron Institute, 162 5th Ave, New York NY 10010, United States}
+
+\begin{abstract} I show how to re-weight pre-existing parameter samples to
+obtain samples distributed according to a hierarchical population analysis.
+\end{abstract}
+
+\section*{ }
+
+For an alternative presentation of essentially identical material, see
+\citet{Hogg2010}.
+
+It is a common problem in astronomy to have a collection of observations of some
+objects from a population and in need of a simultaneous analysis of the
+population properties and object properties.  Such analyses are called
+``hierarchical'' because they naturally separate into several distinct
+``levels.''  To be a bit more mathematically precise: we are presented with a
+set of data,
+%
+\begin{equation}
+  D \equiv \left\{ d_i \mid i = 1, \ldots, N \right\},
+\end{equation}
+%
+consisting of $N$ distinct data sets, $d_i$, each representing some measurement
+of an object.  Each object may have parameters, $\theta_i$, that are of
+interest.  We think that the set of parameters,
+%
+\begin{equation}
+  \Theta \equiv \left\{ \theta_i \mid i = 1, \ldots, N \right\},
+\end{equation}
+%
+comes to us as fair draws\footnote{If the draws are not fair, then the sample is
+said to suffer from \emph{selection effects}; in this case see
+\citet{Loredo2004,Messenger2013,Mandel2019}.  \citet{Loredo2004,Mandel2019} also
+describe how to fit a \emph{rate} of objects from such observations.} from a
+population distribution, which may in turn depend on some paramteters,
+$\lambda$:
+%
+\begin{equation}
+  \theta_i \sim p\left( \theta \mid \lambda \right).
+\end{equation}
+%
+We assume that we know enough about the data generating, or measurement, process
+that we can write down a probabilistic description of the data conditioned on
+the parameters $\theta$; this function is commonly called the ``likelihood:''
+%
+\begin{equation}
+  d_i \sim p\left( d \mid \theta_i \right).
+\end{equation}
+%
+(Note that $\theta_i$ can contain both parameters that are \emph{intrinsic} to
+the object, and also parameters that describe the measurement process for that
+object---detector noise levels, or calibration parameters, for example---and
+that the population distribution can be both an \emph{intrinsic} population and
+also a model of the \emph{distribution} of such measurement parameters.)
+
+If all these distributions are available to us, then it is straightforward to
+sample over the joint distribution of $\Theta$ and $\lambda$ given the data $D$.
+Impose a prior on $\lambda$, $p\left( \lambda \right)$; then\footnote{We are
+here implicitly assuming that the data generating process is such that
+\emph{once conditioned on parameters $\theta$} successive observations are
+independent of each other.  This is almost certainly false, but may be ``true
+enough'' for our purposes, particularly if there are parameters describing
+systematic or ``calibration'' effects in our instrument in each $\theta_i$.}
+%
+\begin{equation}
+  \label{eq:joint-posterior}
+  p\left( \Theta, \lambda \mid D \right) \propto \left[ \prod_{i=1}^N p\left( d_i \mid \theta_i \right) p\left( \theta_i \mid \lambda \right) \right] p\left( \lambda \right),
+\end{equation}
+%
+and your favorite stochastic sampling method\texttrademark{} can be used to draw
+samples in the (possibly high-dimensional) space of $\Theta$ and $\lambda$.
+However, the more common situation is that we are provided instead with a
+\emph{catalog} of objects and parameters already inferred from them, according
+to some prior.  Thus, we have a set of $M$ samples,
+%
+\begin{equation}
+  \left\{ \theta_i^{(j)} \mid j = 1, \ldots, M \right\},
+\end{equation}
+%
+where each sample is drawn from a posterior with a prior $p_0$:
+%
+\begin{equation}
+  \theta_i^{(j)} \sim p\left( d_i \mid \theta \right) p_0\left(\theta \right).
+\end{equation}
+
+A common trick in this situation is to give up on sampling in $\Theta$, and
+integrate the $\theta_i$ out of Eq. \eqref{eq:joint-posterior}:
+%
+\begin{equation}
+  p\left( \lambda \mid D \right) \propto \left[ \prod_{i=1}^N \int \dd \theta_i p\left( d_i \mid \theta_i \right) p\left( \theta_i \mid \lambda \right) \right] p\left( \lambda \right) \equiv p\left( D \mid \lambda \right) p\left( \lambda \right).
+\end{equation}
+%
+The integrals inside the product can be approximated (up to ignorable constants)
+using importance sampling with the samples from our catalog, $\theta_i^{(j)}$:
+%
+\begin{equation}
+  \label{eq:marginal-population}
+  p\left( \lambda \mid D \right) \propto \left[ \prod_{i=1}^N \left\langle \frac{p\left(\theta \mid \lambda \right)}{p_0\left( \theta \right)} \right\rangle_{\theta_i^{(j)}} \right] p\left( \lambda \right),
+\end{equation}
+%
+where the average is taken over the samples $\theta_i^{(j)}$.  Here the ratio of
+the population distribution to the catalog prior is the \emph{importance weight}
+for each of the $\theta_i^{(j)}$.  Depending on the number of samples associated
+to each object in the catalog and the relative widths of the likelihood, catalog
+prior, and population, this procedure can go awry; but often it is good enough,
+and its simplicity combined with the (often dramatic) reduction in
+dimensionality (the components of $\Theta$ often dominate the number of degrees
+of freedom in $\lambda$) argues for using it when possible.
+
+Sometimes we are only interested in the population parameters, $\lambda$; in
+this case the individual-object parameters $\Theta$ are a nuisance anyway, and
+we need not worry about integrating them out.  However, we are often interested
+in \emph{both} the population and individual-level parameters; and sometimes we
+are only using the population to improve estimates of individual-level
+parameters by (partially) pooling information across observations
+\citep{Lieu2017}.  In this case we must recover samples of $\Theta$ after we
+have samples from the marginal distribution over population parameters.
+
+Recall that it is a theorem of probability that
+%
+\begin{equation}
+  p\left( \Theta, \lambda \mid D \right) = p\left( \Theta \mid \lambda, D \right) p\left( \lambda \mid D \right).
+\end{equation}
+If we are given samples, $\lambda^{(k)}$, drawn from $p\left( \lambda \mid D \right)$,
+%
+\begin{equation}
+  \lambda^{(k)} \sim p\left( \lambda \mid D \right),
+\end{equation}
+%
+then augmenting each $\lambda^{(k)}$ with a set $\Theta^{(k)}$, where each $\theta_i^{(k)}$
+is drawn from
+%
+\begin{equation}
+  \label{eq:conditional-theta}
+  \theta_i^{(k)} \sim p\left( d_i \mid \theta \right) p\left( \theta \mid \lambda^{(k)} \right),
+\end{equation}
+%
+will produce a draw from the joint distribution over $\Theta$ and $\lambda$.
+This works because
+%
+\begin{equation}
+  p\left( d_i \mid \theta \right) p\left( \theta \mid \lambda^{(k)} \right) \propto p\left( \theta \mid \lambda, D \right),
+\end{equation}
+%
+with the constant of proportionality \emph{independent} of $\Theta$ at fixed $D$
+and $\lambda$.  A draw from Eq.\ \eqref{eq:conditional-theta} can be
+accomplished by choosing randomly one of the existing catalog samples
+$\theta_i^{(j)}$ with weight, $w_i^{(j)}$, proportional to \citep{Hogg2010}
+%
+\begin{equation}
+  \label{eq:population-weights}
+  w_i^{(j)} \propto \frac{p\left( \theta_i^{(j)} \mid \lambda^{(k)} \right)n}{p_0 \left( \theta_i^{(j)} \right)}.
+\end{equation}
+
+So, to summarize, here is the algorithm for sampling from the joint distribution
+of $\Theta$ and $\lambda$ given $D$ and a catalog of samples, $\theta_i^{(j)}$
+drawn from a catalog posterior with prior $p_0\left(\theta\right)$.
+\begin{enumerate}
+%
+  \item Use a stochastic sampler to draw samples $\lambda^{(k)}$ from Eq.\ \eqref{eq:marginal-population}.
+%
+  \item For each sample, $\lambda_k$, and each object $i$, draw a random catalog
+  sample, $\theta_i^{(k)}$ from the $\theta_i^{(j)}$ with weights given by Eq.\
+  \eqref{eq:population-weights}.
+%
+\end{enumerate}
+
+The pairs of $\lambda^{(k)}$, and the associated set of catalog draws,
+$\Theta^{(k)}$, constitute a sample from the joint distribution on $\Theta$ and
+$\lambda$ defined in Eq.\ \eqref{eq:joint-posterior}, and can be used to
+estimate population properties, individual-event properties informed by a
+population, correlations between population properties and individual-event
+properties, etc.
+
+\bibliography{reweighting}
+
+\end{document}
