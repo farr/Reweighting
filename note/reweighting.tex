@@ -133,6 +133,7 @@ have samples from the marginal distribution over population parameters.
 Recall that it is a theorem of probability that
 %
 \begin{equation}
+  \label{eq:joint-conditional-relation}
   p\left( \Theta, \lambda \mid D \right) = p\left( \Theta \mid \lambda, D \right) p\left( \lambda \mid D \right).
 \end{equation}
 If we are given samples, $\lambda^{(k)}$, drawn from $p\left( \lambda \mid D \right)$,
@@ -185,6 +186,40 @@ $\lambda$ defined in Eq.\ \eqref{eq:joint-posterior}, and can be used to
 estimate population properties, individual-event properties informed by a
 population, correlations between population properties and individual-event
 properties, etc.
+
+In the case where we are not interested in samples $\lambda$ at all, we can also
+integrate out $\lambda$ in Eq.\ \eqref{eq:joint-conditional-relation}.  We will
+need the properly-normalized version of Eq.\ \eqref{eq:conditional-theta} since
+the normalization depends on $\lambda$:
+%
+\begin{equation}
+  p\left( \theta_i \mid \lambda, D \right) = \frac{p\left( d_i \mid \theta_i \right) p\left( \theta_i \mid \lambda\right)}{p\left( d_i \mid \lambda \right)} = \frac{p\left( d_i \mid \theta_i \right) p\left( \theta_i \mid \lambda\right)}{\int \dd \theta \, p\left( d_i \mid \theta\right) p\left( \theta \mid \lambda \right)}.
+\end{equation}
+%
+Then the marginal distribution for $\theta_i$ is
+%
+\begin{equation}
+  p\left( \theta_i \mid D \right) \propto p\left( d_i \mid \theta_i \right) \int \dd \lambda \, \frac{1}{p\left( d_i \mid \lambda \right)} p\left( \theta_i \mid \lambda \right) p\left( \lambda \mid D \right).
+\end{equation}
+%
+Note that the evidence for object $i$ modifies what otherwise would be the
+posterior expectation over $\lambda$ of the population distribution for
+$\theta_i$.   Assuming, again, that we have posterior samples $\theta_i^{(k)}$
+drawn from a catalog with prior $p_0\left(\theta \right)$ and posterior samples
+for $\lambda$ drawn from the marginal posterior, $\lambda^{(l)} \sim p\left(
+\lambda \mid D \right)$, this can be approximated as
+%
+\begin{equation}
+  p\left( \theta_i \mid D \right) \propto p\left( d_i \mid \theta_i \right) \left\langle p\left( \theta_i \mid \lambda^{(l)} \right) \left[\left\langle \frac{p\left( \theta \mid \lambda^{(l)} \right)}{p_0 \left( \theta_i^{(k)} \right)} \right\rangle_{\theta_i^{(k)}} \right]^{-1} \right\rangle_{\lambda^{(l)}},
+\end{equation}
+%
+or, expressed as importance weights for resampling the $\theta^{(k)}_i$
+%
+\begin{equation}
+  w_i^{(k)} \propto \frac{1}{p_0\left( \theta_i^{(k)} \right)} \left\langle p\left( \theta_i^{(k)} \mid \lambda^{(l)} \right) \left[\left\langle \frac{p\left( \theta \mid \lambda^{(l)} \right)}{p_0 \left( \theta_i^{(k)} \right)} \right\rangle_{\theta_i^{(k)}} \right]^{-1} \right\rangle_{\lambda^{(l)}}.
+\end{equation}
+%
+This expression is equivalent to Eq.\ (6) of \citet{Callister2019}.
 
 \bibliography{reweighting}
 
