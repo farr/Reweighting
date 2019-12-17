@@ -1,4 +1,3 @@
-sudo: false
 language: generic
 git:
   lfs_skip_smudge: true # We don't need the LFS files to build the paper.
@@ -10,6 +9,7 @@ addons:
   apt:
     packages:
       - texlive
+      - latexmk
 script: |
   if [[ $TEST_LANG == paper ]]
   then
