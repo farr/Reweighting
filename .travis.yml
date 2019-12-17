@@ -6,6 +6,10 @@ matrix:
   include:
     - os: linux
       env: TEST_LANG='paper'
+addons:
+  apt:
+    packages:
+      - tetex
 script: |
   if [[ $TEST_LANG == paper ]]
   then
