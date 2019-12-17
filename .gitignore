@@ -6,5 +6,6 @@
 *.log
 *.out
 *.synctex.gz
+note/reweighting.pdf
 
 .ipynb_checkpoints
