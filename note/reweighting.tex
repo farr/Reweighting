@@ -210,16 +210,19 @@ for $\lambda$ drawn from the marginal posterior, $\lambda^{(l)} \sim p\left(
 \lambda \mid D \right)$, this can be approximated as
 %
 \begin{equation}
-  p\left( \theta_i \mid D \right) \propto p\left( d_i \mid \theta_i \right) \left\langle p\left( \theta_i \mid \lambda^{(l)} \right) \left[\left\langle \frac{p\left( \theta \mid \lambda^{(l)} \right)}{p_0 \left( \theta_i^{(k)} \right)} \right\rangle_{\theta_i^{(k)}} \right]^{-1} \right\rangle_{\lambda^{(l)}},
+  p\left( \theta_i \mid D \right) \propto p\left( d_i \mid \theta_i \right) \left\langle p\left( \theta_i \mid \lambda^{(l)} \right) \left[\left\langle \frac{p\left( \theta_i^{(k)} \mid \lambda^{(l)} \right)}{p_0 \left( \theta_i^{(k)} \right)} \right\rangle_{\theta_i^{(k)}} \right]^{-1} \right\rangle_{\lambda^{(l)}},
 \end{equation}
 %
 or, expressed as importance weights for resampling the $\theta^{(k)}_i$
 %
 \begin{equation}
-  w_i^{(k)} \propto \frac{1}{p_0\left( \theta_i^{(k)} \right)} \left\langle p\left( \theta_i^{(k)} \mid \lambda^{(l)} \right) \left[\left\langle \frac{p\left( \theta \mid \lambda^{(l)} \right)}{p_0 \left( \theta_i^{(k)} \right)} \right\rangle_{\theta_i^{(k)}} \right]^{-1} \right\rangle_{\lambda^{(l)}}.
+  w_i^{(k)} \propto \frac{1}{p_0\left( \theta_i^{(k)} \right)} \left\langle p\left( \theta_i^{(k)} \mid \lambda^{(l)} \right) \left[\left\langle \frac{p\left( \theta_i^{(k')} \mid \lambda^{(l)} \right)}{p_0 \left( \theta_i^{(k')} \right)} \right\rangle_{\theta_i^{(k')}} \right]^{-1} \right\rangle_{\lambda^{(l)}},
 \end{equation}
 %
-This expression is equivalent to Eq.\ (6) of \citet{Callister2019}.
+where we have introduced the index $k'$ to the inner expectation value to
+emphasize that it should be taken independently of the outer expectation over
+samples of $\theta_i$. This expression is equivalent to Eq.\ (6) of
+\citet{Callister2019}.
 
 \bibliography{reweighting}
 
