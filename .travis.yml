@@ -9,7 +9,7 @@ matrix:
 addons:
   apt:
     packages:
-      - tetex
+      - texlive
 script: |
   if [[ $TEST_LANG == paper ]]
   then
