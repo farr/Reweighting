@@ -9,9 +9,10 @@ addons:
   apt:
     packages:
       - texlive
-      - latexmk
+      - texlive-generic-recommended
       - texlive-publishers
       - texlive-science
+      - latexmk
 script: |
   if [[ $TEST_LANG == paper ]]
   then
