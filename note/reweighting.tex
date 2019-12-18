@@ -230,12 +230,16 @@ samples of $\theta_i$. This expression is equivalent to Eq.\ (6) of
 Eq.\ \eqref{eq:theta-marginal} and its implementation in Eqs.\
 \eqref{eq:theta-marginal-samples} and \eqref{eq:theta-marginal-weights} are
 equivalent to imposing a prior on $\theta_i$ that comes from the population
-distribution weighted by the ``leave one out'' posterior on $\lambda$:
+distribution weighted by the ``leave one out'' posterior on
+$\lambda$:\footnote{It seems like this must be a well-known fact---probably it
+appears in \citet{Gelman2013}---but I am not familiar with it.}
 %
 \begin{equation}
   p\left( \theta_i \mid D \right) \propto p\left( d_i \mid \theta_i \right) \int \dd \lambda \, p\left( \theta_i \mid \lambda \right) p\left( \lambda \mid D \backslash d_i \right).
 \end{equation}
 %
+
+\clearpage
 
 \bibliography{reweighting}
 
