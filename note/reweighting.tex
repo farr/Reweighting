@@ -5,18 +5,27 @@
 \newcommand{\dd}{\ensuremath{\mathrm{d}}}
 \newcommand{\diff}[2]{\frac{\dd #1}{\dd #2}}
 
+% Affiliations
+\newcommand{\flatironCCA}{Center for Computational Astrophysics, Flatiron Institute, 162 5th Ave, New York NY 10010, United States}
+\newcommand{\stonybrook}{Department of Physics and Astronomy, Stony Brook University, Stony Brook NY 11794, United States}
+
 \begin{document}
 
 \title{Re-Weighting Existing Samples to a Population Analysis}
 \author{Will M. Farr}
 \email{will.farr@stonybrook.edu}
 \email{wfarr@flatironinstitute.org}
-\affiliation{Department of Physics and Astronomy, Stony Brook University, Stony Brook NY 11794, United States}
-\affiliation{Center for Computational Astrophysics, Flatiron Institute, 162 5th Ave, New York NY 10010, United States}
+\affiliation{\stonybrook}
+\affiliation{\flatironCCA}
 
-\begin{abstract} I show how to re-weight pre-existing parameter samples to
-obtain samples distributed according to a hierarchical population analysis.
-\end{abstract}
+\author{Thomas A. Callister}
+\email{thomas.callister@flatironinstitute.org}
+\affiliation{\flatironCCA}
+
+\begin{abstract} We show how to re-weight pre-existing parameter samples to
+obtain samples distributed according to a hierarchical population analysis.  We
+discuss the behavior of the marginalized distribution for single-event
+parameters in a hierarchical population analysis. \end{abstract}
 
 \section*{ }
 
@@ -24,11 +33,10 @@ For an alternative presentation of essentially identical material, see
 \citet{Hogg2010}.
 
 It is a common problem in astronomy to have a collection of observations of some
-objects from a population and in need of a simultaneous analysis of the
-population properties and object properties.  Such analyses are called
-``hierarchical'' because they naturally separate into several distinct
-``levels.''  To be a bit more mathematically precise: we are presented with a
-set of data,
+objects from a population in need of a simultaneous analysis of the population
+properties and object properties.  Such analyses are called ``hierarchical''
+because they naturally separate into several distinct ``levels.''  To be a bit
+more mathematically precise: we are presented with a set of data,
 %
 \begin{equation}
   D \equiv \left\{ d_i \mid i = 1, \ldots, N \right\},
@@ -65,7 +73,21 @@ the parameters $\theta$; this function is commonly called the ``likelihood:''
 the object, and also parameters that describe the measurement process for that
 object---detector noise levels, or calibration parameters, for example---and
 that the population distribution can be both an \emph{intrinsic} population and
-also a model of the \emph{distribution} of such measurement parameters.)
+also a model of the \emph{distribution} of such measurement parameters.)  A
+graphical description of our hierarchical model appears in Figure \ref{fig:pgm}.
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[height=0.5\columnwidth]{pgm}
+\end{center}
+%
+  \caption{\label{fig:pgm} A graphical description of our hierarchical model.
+  Each node in the graph is a variable.  Shaded nodes are \emph{observed}
+  variables whose values are conditioned on in the analysis.  An arrow
+  connecting two nodes represents a distribution of the target node conditioned
+  on the source node's value.}
+%
+\end{figure}
 
 If all these distributions are available to us, then it is straightforward to
 sample over the joint distribution of $\Theta$ and $\lambda$ given the data $D$.
@@ -84,7 +106,7 @@ systematic or ``calibration'' effects in our instrument in each $\theta_i$.}
 and your favorite stochastic sampling method\texttrademark{} can be used to draw
 samples in the (possibly high-dimensional) space of $\Theta$ and $\lambda$.
 However, the more common situation is that we are provided instead with a
-\emph{catalog} of objects and parameters already inferred from them, according
+\emph{catalog} of objects and parameters already inferred from them according
 to some prior.  Thus, we have a set of $M$ samples,
 %
 \begin{equation}
@@ -97,8 +119,8 @@ where each sample is drawn from a posterior with a prior $p_0$:
   \theta_i^{(j)} \sim p\left( d_i \mid \theta \right) p_0\left(\theta \right).
 \end{equation}
 
-A common trick in this situation is to give up on sampling in $\Theta$, and
-integrate the $\theta_i$ out of Eq. \eqref{eq:joint-posterior}:
+A common trick in this situation \citep{Hogg2010} is to give up on sampling in
+$\Theta$, and integrate the $\theta_i$ out of Eq. \eqref{eq:joint-posterior}:
 %
 \begin{equation}
   p\left( \lambda \mid D \right) \propto \left[ \prod_{i=1}^N \int \dd \theta_i p\left( d_i \mid \theta_i \right) p\left( \theta_i \mid \lambda \right) \right] p\left( \lambda \right) \equiv p\left( D \mid \lambda \right) p\left( \lambda \right).

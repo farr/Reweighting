@@ -13,3 +13,5 @@ dependencies:
   - python=3.7
   - arviz
   - tqdm
+  - pip:
+    - daft
