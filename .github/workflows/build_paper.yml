@@ -15,4 +15,3 @@ jobs:
         with:
           name: reweighting.pdf
           path: note/reweighting.pdf
-          target: reweighting.pdf
