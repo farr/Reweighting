@@ -6,7 +6,12 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v2
-      - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@v2
+      - name: Install dependencies
+        run: apt-get texlive
+      - name: Build doc
+        run: latexmk -pdf -f note/reweighting
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
         with:
-          root_file: note/reweighting.tex
+          name: reweighting.pdf
+          path: note/reweighting.pdf
