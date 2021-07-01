@@ -5,4 +5,4 @@ in the LIGO Rates and Populations group.  They deal with various methods to
 re-weight existing samples over posterior distributions for observations to
 account for a newly-fitted population distribution.
 
-You can find an automatically built PDF as an artifact [here](https://github.com/farr/Reweighting/actions).
+You can find an automatically built PDF as an artifact [here](https://github.com/farr/Reweighting/actions) (click on the latest completed action, and you will see artifacts you can download).  GitHub actions currently don't give a stable URL for the latest artifact built by the action :(.
