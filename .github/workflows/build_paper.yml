@@ -7,7 +7,7 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: apt-get texlive
+        run: apt-get install texlive
       - name: Build doc
         run: latexmk -pdf -f note/reweighting
       - name: Upload artifact
