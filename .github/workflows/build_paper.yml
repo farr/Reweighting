@@ -9,7 +9,7 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get install latexmk texlive
       - name: Build doc
-        run: latexmk -pdf -f note/reweighting
+        run: cd note && latexmk -pdf -f reweighting
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
