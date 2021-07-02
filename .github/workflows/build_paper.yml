@@ -1,5 +1,5 @@
 name: paper-maker
-description: Automagically build LaTex manuscripts and push the latest PDF back to GitHub.  Derived from andycasey's paper-maker.
+# description: Automagically build LaTex manuscripts and push the latest PDF back to GitHub.  Derived from andycasey's paper-maker.
 
 on: push
 
