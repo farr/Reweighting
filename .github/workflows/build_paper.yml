@@ -1,17 +1,39 @@
-name: Build paper
-on: [push]
+name: paper-maker
+description: Automagically build LaTex manuscripts and push the latest PDF back to GitHub.  Derived from andycasey's paper-maker.
+
+on: push
+
+branding:
+  icon: 'zap'
+  color: 'blue'
+
 jobs:
-  build_latex:
+  build:
     runs-on: ubuntu-latest
+    env:
+      MANUSCRIPT_PATH: paper/ms # exclude the '.tex' / '.pdf' extension!
+      LATEX: pdflatex -shell-escape
+      BIBTEX: bibtex
     steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: sudo apt-get install latexmk texlive texlive-science texlive-publishers
-      - name: Build doc
-        run: cd note && latexmk -pdf -f reweighting
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: reweighting.pdf
-          path: note/reweighting.pdf
+    - uses: actions/checkout@v1
+    - name: Install texlive
+      run: |
+        sudo apt-get install texlive-publishers \
+                             texlive-latex-recommended \
+                             texlive-latex-extra \
+                             texlive-fonts-recommended \
+                             texlive-fonts-extra \
+                             latexmk
+    - name: Build paper
+      run: |
+        cd ${MANUSCRIPT_PATH%/*}
+        latexmk -pdf -f ${MANUSCRIPT_PATH##*/}
+    - name: Push paper
+      run: |
+        git checkout --orphan ${GITHUB_REF##*/}-pdf
+        git rm -rf .github/
+        cd ${MANUSCRIPT_PATH%/*}
+        git rm -rf .
+        git add -f ${MANUSCRIPT_PATH##*/}.pdf
+        git -c user.name='paper-maker' -c user.email='paper-maker' commit -m "update pdf"
+        git push -q -f https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} ${GITHUB_REF##*/}-pdf
